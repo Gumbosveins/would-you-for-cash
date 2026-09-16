@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Would You For Cash? — Party game for iPhone</title>
+  <meta name="description" content="The party game that asks how far you'd go for the right price. Free on the App Store. Premium decks unlock wilder questions." />
+  <meta property="og:title" content="Would You For Cash?" />
+  <meta property="og:description" content="Swipe yes or no on money hypotheticals. Free deck + premium IAP. 17+." />
+  <meta property="og:image" content="assets/icon.png" />
+  <link rel="icon" href="assets/icon.png" />
+  <style>
+    :root {
+      --bg: #07070c;
+      --card: #12121a;
+      --ink: #f5f5f7;
+      --muted: #9a9aad;
+      --cash: #3dff8a;
+      --hot: #ff2d6f;
+      --gold: #ffd56a;
+      --line: #2a2a38;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+      background: radial-gradient(1200px 600px at 80% -10%, #2a1030 0%, transparent 55%),
+                  radial-gradient(900px 500px at -10% 20%, #0d2a1c 0%, transparent 50%),
+                  var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      min-height: 100dvh;
+    }
+    a { color: var(--cash); }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 24px 20px 80px; }
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 48px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; }
+    .brand img { width: 44px; height: 44px; border-radius: 12px; }
+    .badge-17 {
+      font-size: 12px; font-weight: 700; color: var(--hot);
+      border: 1px solid var(--hot); border-radius: 999px; padding: 4px 10px;
+    }
+    .hero {
+      display: grid; gap: 36px; align-items: center;
+      margin-bottom: 64px;
+    }
+    @media (min-width: 800px) {
+      .hero { grid-template-columns: 1.1fr 0.9fr; }
+    }
+    h1 {
+      font-size: clamp(2.2rem, 6vw, 3.4rem);
+      line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 14px;
+    }
+    h1 span { color: var(--cash); }
+    .lead { color: var(--muted); font-size: 1.1rem; margin-bottom: 24px; max-width: 36ch; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--cash); color: #04140a; font-weight: 800;
+      text-decoration: none; padding: 14px 22px; border-radius: 14px;
+      box-shadow: 0 0 0 1px #1aff70, 0 12px 40px rgba(61,255,138,0.25);
+    }
+    .btn:hover { filter: brightness(1.05); }
+    .btn-ghost {
+      background: transparent; color: var(--ink);
+      border: 1px solid var(--line); box-shadow: none;
+    }
+    .phones {
+      display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;
+      scroll-snap-type: x mandatory;
+    }
+    .phones img {
+      height: 420px; width: auto; border-radius: 28px;
+      border: 1px solid var(--line); scroll-snap-align: start;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+    }
+    section { margin: 56px 0; }
+    h2 { font-size: 1.6rem; margin-bottom: 16px; letter-spacing: -0.02em; }
+    .grid {
+      display: grid; gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 18px; padding: 18px;
+    }
+    .card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .card p { color: var(--muted); font-size: 0.95rem; }
+    .price {
+      display: inline-block; margin-top: 10px; font-size: 12px; font-weight: 800;
+      color: var(--gold); background: rgba(255,213,106,0.08);
+      border: 1px solid rgba(255,213,106,0.25); padding: 3px 8px; border-radius: 999px;
+    }
+    .steps { counter-reset: s; display: grid; gap: 12px; }
+    .steps li {
+      list-style: none; background: var(--card); border: 1px solid var(--line);
+      border-radius: 16px; padding: 16px 16px 16px 56px; position: relative;
+      color: var(--muted);
+    }
+    .steps li::before {
+      counter-increment: s; content: counter(s);
+      position: absolute; left: 14px; top: 14px;
+      width: 30px; height: 30px; border-radius: 10px;
+      background: var(--hot); color: white; font-weight: 800;
+      display: grid; place-items: center;
+    }
+    .steps strong { color: var(--ink); }
+    footer {
+      margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--line);
+      color: var(--muted); font-size: 0.9rem;
+      display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <img src="assets/icon.png" alt="" width="44" height="44" />
+        Would You For Cash?
+      </div>
+      <span class="badge-17">17+</span>
+    </header>
+
+    <div class="hero">
+      <div>
+        <h1>How far would you go for the <span>right price</span>?</h1>
+        <p class="lead">A party card game for your phone. Draw a money hypothetical, vote yes or no, then argue about why. Free deck on day one. Wilder decks unlock when you’re ready.</p>
+        <div class="cta-row">
+          <a class="btn" href="https://apps.apple.com/app/would-you-for-cash/id6759262761">Download on the App Store</a>
+          <a class="btn btn-ghost" href="#decks">See the decks</a>
+        </div>
+      </div>
+      <div class="phones" aria-label="App screenshots">
+        <img src="assets/shot1.jpg" alt="Would You For Cash home screen" />
+        <img src="assets/shot2.jpg" alt="Drawing a cash scenario card" />
+        <img src="assets/shot3.jpg" alt="Yes or no swipe on a question" />
+      </div>
+    </div>
+
+    <section>
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li><strong>Pick a deck</strong> — Classic is free. Premium decks add heat.</li>
+        <li><strong>Draw a card</strong> — Read the scenario out loud to the room.</li>
+        <li><strong>Swipe yes or no</strong> — Then ask why. That’s the game.</li>
+      </ol>
+    </section>
+
+    <section id="decks">
+      <h2>Decks</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Classic</h3>
+          <p>The free starter set. Enough to ruin a quiet dinner in a good way.</p>
+          <span class="price">Free</span>
+        </div>
+        <div class="card">
+          <h3>After Dark</h3>
+          <p>Adult scenarios. Keep this one away from the kids’ table.</p>
+          <span class="price">IAP</span>
+        </div>
+        <div class="card">
+          <h3>Extreme</h3>
+          <p>Physical dares and courage checks for people who talk big.</p>
+          <span class="price">IAP</span>
+        </div>
+        <div class="card">
+          <h3>Ethical Dilemmas</h3>
+          <p>Morals vs money. Great for late-night debates.</p>
+          <span class="price">IAP</span>
+        </div>
+        <div class="card">
+          <h3>Relationship Roulette</h3>
+          <p>Couples and friend-group chaos.</p>
+          <span class="price">IAP</span>
+        </div>
+        <div class="card">
+          <h3>Celebrity Swap</h3>
+          <p>Fame, status, and what you’d trade for it.</p>
+          <span class="price">IAP</span>
+        </div>
+      </div>
+      <p style="color:var(--muted);margin-top:16px;font-size:0.95rem;">Individual decks and an all-decks bundle are available as non-consumable in-app purchases. No ads. No accounts. No tracking.</p>
+    </section>
+
+    <section>
+      <h2>Built for real nights</h2>
+      <div class="grid">
+        <div class="card"><h3>House parties</h3><p>Pass the phone. Instant conversation.</p></div>
+        <div class="card"><h3>Road trips</h3><p>Better than another playlist argument.</p></div>
+        <div class="card"><h3>Date night</h3><p>Learn what your person would actually do.</p></div>
+      </div>
+    </section>
+
+    <section style="text-align:center;padding:28px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,#161622,#0c0c12);">
+      <h2 style="margin-bottom:8px;">Ready to play?</h2>
+      <p style="color:var(--muted);margin-bottom:18px;">Free to download on iPhone. Unlock more decks when the room wants blood.</p>
+      <a class="btn" href="https://apps.apple.com/app/would-you-for-cash/id6759262761">Get Would You For Cash?</a>
+    </section>
+
+    <footer>
+      <div>
+        © GUDMUNDUR SVEINSSON · Would You For Cash?<br />
+        Support: <a href="mailto:gumbosveins@gmail.com">gumbosveins@gmail.com</a>
+      </div>
+      <div>
+        <a href="https://sunny-pony-594b0d.netlify.app/">Privacy Policy</a>
+        · <a href="https://apps.apple.com/app/would-you-for-cash/id6759262761">App Store</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
