@@ -118,6 +118,50 @@
       color: var(--muted); font-size: 0.9rem;
       display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between;
     }
+
+    .try-wrap {
+      margin: 48px 0 64px;
+      padding: 22px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #161622, #0c0c12);
+    }
+    .try-wrap h2 { margin-bottom: 6px; }
+    .try-sub { color: var(--muted); margin-bottom: 18px; }
+    .play-card {
+      min-height: 220px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 28px 20px;
+      border-radius: 20px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      margin-bottom: 16px;
+    }
+    .play-cash {
+      font-size: 0.85rem; font-weight: 800; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 12px;
+    }
+    .play-q { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; max-width: 28ch; }
+    .play-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .play-actions button {
+      border: 0; cursor: pointer; font-weight: 800; font-size: 1rem;
+      padding: 14px 28px; border-radius: 14px; min-width: 120px;
+    }
+    .btn-yes { background: var(--cash); color: #04140a; }
+    .btn-no { background: var(--hot); color: white; }
+    .play-meta { color: var(--muted); font-size: 0.9rem; margin-top: 12px; text-align: center; }
+    .play-done { display: none; text-align: center; padding: 12px 8px 4px; }
+    .play-done.show { display: block; }
+    .play-active.hide { display: none; }
+    .argue {
+      margin-top: 10px; color: var(--ink); font-weight: 700;
+      background: rgba(61,255,138,0.08); border: 1px solid rgba(61,255,138,0.25);
+      border-radius: 12px; padding: 10px 12px; display: none;
+    }
+    .argue.show { display: block; }
+
   </style>
 </head>
 <body>
@@ -137,6 +181,7 @@
         <div class="cta-row">
           <a class="btn" href="https://apps.apple.com/app/would-you-for-cash/id6759262761">Download on the App Store</a>
           <a class="btn btn-ghost" href="https://www.producthunt.com/products/would-you-for-cash?launch=would-you-for-cash" rel="noopener">We're on Product Hunt today</a>
+          <a class="btn btn-ghost" href="#try">Try a card</a>
           <a class="btn btn-ghost" href="#decks">See the decks</a>
         </div>
       </div>
@@ -146,6 +191,30 @@
         <img src="assets/shot3.jpg" alt="Yes or no swipe on a question" />
       </div>
     </div>
+
+
+    <section class="try-wrap" id="try" aria-label="Try a sample card">
+      <h2>Try one card (no install)</h2>
+      <p class="try-sub">Desktop visitors hit an App Store wall. Play 5 Classic-style samples here, then grab the full free deck on iPhone.</p>
+      <div class="play-active" id="playActive">
+        <div class="play-card">
+          <div class="play-cash" id="playCash">$500</div>
+          <div class="play-q" id="playQ">Loading…</div>
+        </div>
+        <div class="play-actions">
+          <button type="button" class="btn-yes" id="btnYes">Yes</button>
+          <button type="button" class="btn-no" id="btnNo">No</button>
+        </div>
+        <p class="argue" id="playArgue">Now ask the room why. That’s the game.</p>
+        <p class="play-meta"><span id="playProgress">1</span> / 5 · sample only</p>
+      </div>
+      <div class="play-done" id="playDone">
+        <p style="font-size:1.2rem;font-weight:800;margin-bottom:8px;">You get the idea.</p>
+        <p style="color:var(--muted);margin-bottom:16px;">The free Classic deck has dozens more on iPhone. Premium decks unlock when the night gets louder.</p>
+        <a class="btn" href="https://apps.apple.com/app/would-you-for-cash/id6759262761">Get the free deck on the App Store</a>
+        <p class="play-meta"><button type="button" id="btnReplay" style="background:transparent;border:0;color:var(--cash);font-weight:700;cursor:pointer;text-decoration:underline;">Play samples again</button></p>
+      </div>
+    </section>
 
     <section>
       <h2>How it works</h2>
