@@ -180,7 +180,7 @@
         <p class="lead">A party card game for your phone. Draw a money hypothetical, vote yes or no, then argue about why. Free deck on day one. Wilder decks unlock when you’re ready.</p>
         <div class="cta-row">
           <a class="btn" href="https://apps.apple.com/app/would-you-for-cash/id6759262761">Download on the App Store</a>
-          <a class="btn btn-ghost" href="https://www.producthunt.com/products/would-you-for-cash?launch=would-you-for-cash" rel="noopener">We're on Product Hunt today</a>
+          <a class="btn btn-ghost" href="https://www.producthunt.com/products/would-you-for-cash" rel="noopener">On Product Hunt</a>
           <a class="btn btn-ghost" href="#try">Try a card</a>
           <a class="btn btn-ghost" href="#decks">See the decks</a>
         </div>
@@ -288,5 +288,62 @@
       </div>
     </footer>
   </div>
+
+  <script>
+    (function () {
+      var samples = [
+        { cash: "$500", q: "Would you wear the same outfit every day for a month for $500?" },
+        { cash: "$5,000", q: "Would you give up coffee and energy drinks for a full year for $5,000?" },
+        { cash: "$25,000", q: "Would you delete every social app for one year for $25,000?" },
+        { cash: "$50,000", q: "Would you move to a city you have never visited for two years for $50,000?" },
+        { cash: "$100,000", q: "Would you tell your boss your real opinion of them, on speaker, for $100,000?" }
+      ];
+      var i = 0;
+      var cashEl = document.getElementById("playCash");
+      var qEl = document.getElementById("playQ");
+      var progressEl = document.getElementById("playProgress");
+      var argueEl = document.getElementById("playArgue");
+      var activeEl = document.getElementById("playActive");
+      var doneEl = document.getElementById("playDone");
+      var btnYes = document.getElementById("btnYes");
+      var btnNo = document.getElementById("btnNo");
+      var btnReplay = document.getElementById("btnReplay");
+      if (!cashEl || !qEl || !btnYes || !btnNo) return;
+
+      function showCard() {
+        var s = samples[i];
+        cashEl.textContent = s.cash;
+        qEl.textContent = s.q;
+        progressEl.textContent = String(i + 1);
+        argueEl.classList.remove("show");
+      }
+
+      function answer() {
+        argueEl.classList.add("show");
+        window.setTimeout(function () {
+          i += 1;
+          if (i >= samples.length) {
+            activeEl.classList.add("hide");
+            doneEl.classList.add("show");
+            return;
+          }
+          showCard();
+        }, 700);
+      }
+
+      btnYes.addEventListener("click", answer);
+      btnNo.addEventListener("click", answer);
+      if (btnReplay) {
+        btnReplay.addEventListener("click", function () {
+          i = 0;
+          doneEl.classList.remove("show");
+          activeEl.classList.remove("hide");
+          showCard();
+        });
+      }
+      showCard();
+    })();
+  </script>
+
 </body>
 </html>
