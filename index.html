@@ -9,11 +9,11 @@
   <meta property="og:description" content="Swipe yes or no on money hypotheticals. Free deck + premium IAP. 17+." />
   <meta property="og:url" content="https://gumbosveins.github.io/would-you-for-cash/" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://gumbosveins.github.io/would-you-for-cash/assets/icon-512.png" />
+  <meta property="og:image" content="https://gumbosveins.github.io/would-you-for-cash/assets/shot1.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Would You For Cash?" />
   <meta name="twitter:description" content="Pass-the-phone party game. Money hypotheticals. Swipe yes or no." />
-  <meta name="twitter:image" content="https://gumbosveins.github.io/would-you-for-cash/assets/icon-512.png" />
+  <meta name="twitter:image" content="https://gumbosveins.github.io/would-you-for-cash/assets/shot1.jpg" />
   <meta name="theme-color" content="#07070c" />
   <meta name="apple-itunes-app" content="app-id=6759262761, app-argument=https://gumbosveins.github.io/would-you-for-cash/" />
   <link rel="canonical" href="https://gumbosveins.github.io/would-you-for-cash/" />
@@ -97,6 +97,15 @@
       background: transparent; color: var(--ink);
       border: 1px solid var(--line); box-shadow: none;
     }
+    button.btn {
+      font: inherit; cursor: pointer; border: 0;
+    }
+    .hero-hint {
+      margin-top: 12px; color: var(--cash); font-size: 0.95rem; font-weight: 700; min-height: 1.2em;
+    }
+    .phones::-webkit-scrollbar { height: 8px; }
+    .phones::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+
     .phones {
       display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;
       scroll-snap-type: x mandatory;
@@ -257,22 +266,26 @@
         <p class="lead">A party card game for your phone. Draw a money hypothetical, vote yes or no, then argue about why. Free deck on day one. Wilder decks unlock when you’re ready.</p>
         <div class="cta-row">
           <a class="btn" href="https://apps.apple.com/app/would-you-for-cash/id6759262761">Download on the App Store</a>
-          <a class="btn btn-ghost" href="https://www.producthunt.com/products/would-you-for-cash" rel="noopener">On Product Hunt</a>
           <a class="btn btn-ghost" href="#try">Try a card</a>
+          <button type="button" class="btn btn-ghost" id="btnShareTry">Share the try link</button>
+          <button type="button" class="btn btn-ghost" id="btnCopyStore">Copy App Store link</button>
           <a class="btn btn-ghost" href="#decks">See the decks</a>
         </div>
+        <p class="hero-hint" id="heroHint" hidden></p>
       </div>
       <div class="phones" aria-label="App screenshots">
-        <img src="assets/shot1.jpg" alt="Would You For Cash home screen" />
-        <img src="assets/shot2.jpg" alt="Drawing a cash scenario card" />
-        <img src="assets/shot3.jpg" alt="Yes or no swipe on a question" />
+        <img src="assets/shot1.jpg" alt="Would You For Cash home screen" width="194" height="420" loading="eager" />
+        <img src="assets/shot2.jpg" alt="Drawing a cash scenario card" width="194" height="420" loading="lazy" />
+        <img src="assets/shot3.jpg" alt="Yes or no swipe on a question" width="194" height="420" loading="lazy" />
+        <img src="assets/shot4.jpg" alt="Deck picker with Classic and premium decks" width="194" height="420" loading="lazy" />
+        <img src="assets/shot5.jpg" alt="In game card with yes and no choices" width="194" height="420" loading="lazy" />
       </div>
     </div>
 
 
     <section class="try-wrap" id="try" aria-label="Try a sample card">
       <h2>Try one card (no install)</h2>
-      <p class="try-sub">Desktop visitors hit an App Store wall. Play 8 Classic style samples here (tap or press Y / N), then grab the free deck on iPhone. On desktop, scan the QR after you finish.</p>
+      <p class="try-sub">Desktop visitors hit an App Store wall. Play 10 Classic style samples here (tap or press Y / N), then grab the free deck on iPhone. On desktop, scan the QR after you finish.</p>
       <div class="play-active" id="playActive">
         <div class="play-card">
           <div class="play-cash" id="playCash">$500</div>
@@ -283,7 +296,7 @@
           <button type="button" class="btn-no" id="btnNo">No</button>
         </div>
         <p class="argue" id="playArgue">Now ask the room why. That’s the game.</p>
-        <p class="play-meta"><span id="playProgress">1</span> / 8 · sample only</p>
+        <p class="play-meta"><span id="playProgress">1</span> / 10 · sample only</p>
       </div>
       <div class="play-done" id="playDone">
         <p style="font-size:1.2rem;font-weight:800;margin-bottom:8px;">You get the idea.</p>
@@ -298,7 +311,7 @@
         </div>
         <div class="share-box">
           <strong>Text a friend</strong>
-          <p id="shareText">I just tried Would You For Cash samples. Yes 0, No 0. Free on the App Store.</p>
+          <p id="shareText">I just tried Would You For Cash samples. Yes 0, No 0. Try a card (no install): https://gumbosveins.github.io/would-you-for-cash/#try</p>
           <div class="share-actions">
             <button type="button" id="btnCopy">Copy that line</button>
             <button type="button" id="btnShare">Share</button>
@@ -382,7 +395,7 @@
       </details>
       <details>
         <summary>Do I need an iPhone?</summary>
-        <p>The full game is iOS only right now. This page lets you try eight sample cards in any browser first.</p>
+        <p>The full game is iOS only right now. This page lets you try ten sample cards in any browser first.</p>
       </details>
       <details>
         <summary>Does it work for two people?</summary>
@@ -421,12 +434,14 @@
     (function () {
       var samples = [
         { cash: "$500", q: "Would you wear the same outfit every day for a month for $500?" },
+        { cash: "$2,000", q: "Would you answer every text with only voice notes for a month for $2,000?" },
         { cash: "$5,000", q: "Would you give up coffee and energy drinks for a full year for $5,000?" },
         { cash: "$10,000", q: "Would you let your friends post your camera roll highlights for a week for $10,000?" },
         { cash: "$25,000", q: "Would you delete every social app for one year for $25,000?" },
         { cash: "$50,000", q: "Would you move to a city you have never visited for two years for $50,000?" },
         { cash: "$75,000", q: "Would you take a job with no days off for six months for $75,000?" },
         { cash: "$100,000", q: "Would you tell your boss your real opinion of them, on speaker, for $100,000?" },
+        { cash: "$150,000", q: "Would you live without headphones or earbuds for a year for $150,000?" },
         { cash: "$250,000", q: "Would you skip your best friend's wedding for $250,000?" }
       ];
       var i = 0;
@@ -468,7 +483,7 @@
             yesCount +
             ", No " +
             noCount +
-            ". Free on the App Store: https://apps.apple.com/app/would-you-for-cash/id6759262761";
+            ". Try a card (no install): https://gumbosveins.github.io/would-you-for-cash/#try · App Store: https://apps.apple.com/app/would-you-for-cash/id6759262761";
         }
       }
 
@@ -534,16 +549,55 @@
       if (btnShare && shareText) {
         btnShare.addEventListener("click", function () {
           var text = shareText.textContent || "";
-          var store = "https://apps.apple.com/app/would-you-for-cash/id6759262761";
+          var tryUrl = "https://gumbosveins.github.io/would-you-for-cash/#try";
           if (navigator.share) {
             navigator.share({
               title: "Would You For Cash?",
               text: text,
-              url: store
+              url: tryUrl
             }).catch(function () {});
           } else if (btnCopy) {
             btnCopy.click();
           }
+        });
+      }
+
+      var storeUrl = "https://apps.apple.com/app/would-you-for-cash/id6759262761";
+      var tryUrl = "https://gumbosveins.github.io/would-you-for-cash/#try";
+      var heroHint = document.getElementById("heroHint");
+      function flashHint(msg) {
+        if (!heroHint) return;
+        heroHint.hidden = false;
+        heroHint.textContent = msg;
+        window.setTimeout(function () { heroHint.textContent = ""; }, 2200);
+      }
+      function copyText(text, okMsg) {
+        function ok() { flashHint(okMsg); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(ok).catch(function () {
+            window.prompt("Copy this:", text);
+          });
+        } else {
+          window.prompt("Copy this:", text);
+        }
+      }
+      var btnShareTry = document.getElementById("btnShareTry");
+      var btnCopyStore = document.getElementById("btnCopyStore");
+      if (btnShareTry) {
+        btnShareTry.addEventListener("click", function () {
+          var text = "Try one Would You For Cash card with no install: " + tryUrl;
+          if (navigator.share) {
+            navigator.share({ title: "Would You For Cash?", text: text, url: tryUrl })
+              .then(function () { flashHint("Shared"); })
+              .catch(function () { copyText(tryUrl, "Try link copied"); });
+          } else {
+            copyText(tryUrl, "Try link copied");
+          }
+        });
+      }
+      if (btnCopyStore) {
+        btnCopyStore.addEventListener("click", function () {
+          copyText(storeUrl, "App Store link copied");
         });
       }
       showCard();
