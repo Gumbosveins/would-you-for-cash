@@ -143,6 +143,32 @@
       display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between;
     }
 
+
+    .sticky-install {
+      position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 40;
+      display: none; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 12px 14px; border-radius: 16px;
+      background: rgba(18,18,26,0.96); border: 1px solid var(--line);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.45); backdrop-filter: blur(10px);
+    }
+    .sticky-install.show { display: flex; }
+    .sticky-install p { color: var(--muted); font-size: 0.9rem; margin: 0; }
+    .sticky-install strong { color: var(--ink); }
+    .sticky-install .btn { padding: 10px 14px; font-size: 0.9rem; }
+    .qr-row {
+      display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: center;
+      margin: 18px 0 8px;
+    }
+    .qr-card {
+      background: #fff; border-radius: 14px; padding: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    }
+    .qr-card img { display: block; width: 132px; height: 132px; }
+    .qr-hint { color: var(--muted); font-size: 0.9rem; max-width: 22ch; text-align: left; }
+    .share-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 10px; }
+    .host-tips li { margin: 8px 0; color: var(--muted); }
+    .host-tips strong { color: var(--ink); }
+
     .try-wrap {
       margin: 48px 0 64px;
       padding: 22px;
@@ -246,7 +272,7 @@
 
     <section class="try-wrap" id="try" aria-label="Try a sample card">
       <h2>Try one card (no install)</h2>
-      <p class="try-sub">Desktop visitors hit an App Store wall. Play 5 Classic style samples here (tap or press Y / N), then grab the full free deck on iPhone.</p>
+      <p class="try-sub">Desktop visitors hit an App Store wall. Play 8 Classic style samples here (tap or press Y / N), then grab the free deck on iPhone. On desktop, scan the QR after you finish.</p>
       <div class="play-active" id="playActive">
         <div class="play-card">
           <div class="play-cash" id="playCash">$500</div>
@@ -257,17 +283,26 @@
           <button type="button" class="btn-no" id="btnNo">No</button>
         </div>
         <p class="argue" id="playArgue">Now ask the room why. That’s the game.</p>
-        <p class="play-meta"><span id="playProgress">1</span> / 5 · sample only</p>
+        <p class="play-meta"><span id="playProgress">1</span> / 8 · sample only</p>
       </div>
       <div class="play-done" id="playDone">
         <p style="font-size:1.2rem;font-weight:800;margin-bottom:8px;">You get the idea.</p>
         <div class="tally" aria-live="polite"><span class="yes" id="tallyYes">Yes 0</span><span class="no" id="tallyNo">No 0</span></div>
         <p style="color:var(--muted);margin-bottom:16px;">The free Classic deck has dozens more on iPhone. Premium decks unlock when the night gets louder.</p>
         <a class="btn" href="https://apps.apple.com/app/would-you-for-cash/id6759262761">Get the free deck on the App Store</a>
+        <div class="qr-row">
+          <div class="qr-card">
+            <img src="assets/app-store-qr.png" width="132" height="132" alt="QR code for the App Store listing" />
+          </div>
+          <p class="qr-hint"><strong style="color:var(--ink);display:block;margin-bottom:4px;">On a laptop?</strong> Point your iPhone camera at this code. No typing the App Store URL.</p>
+        </div>
         <div class="share-box">
           <strong>Text a friend</strong>
           <p id="shareText">I just tried Would You For Cash samples. Yes 0, No 0. Free on the App Store.</p>
-          <button type="button" id="btnCopy">Copy that line</button>
+          <div class="share-actions">
+            <button type="button" id="btnCopy">Copy that line</button>
+            <button type="button" id="btnShare">Share</button>
+          </div>
         </div>
         <p class="play-meta"><button type="button" id="btnReplay" style="background:transparent;border:0;color:var(--cash);font-weight:700;cursor:pointer;text-decoration:underline;">Play samples again</button></p>
       </div>
@@ -328,6 +363,17 @@
       </div>
     </section>
 
+
+    <section id="host">
+      <h2>How to run a round</h2>
+      <ol class="steps host-tips">
+        <li><strong>One phone, many opinions.</strong> Read the card out loud. Nobody answers silently.</li>
+        <li><strong>Force the why.</strong> Yes or no is cheap. The argument is the product.</li>
+        <li><strong>Pass left after each card.</strong> Keeps shy people in and stops one person hogging the heat.</li>
+        <li><strong>Unlock After Dark only when the room asks.</strong> Classic is enough for the first twenty minutes.</li>
+      </ol>
+    </section>
+
     <section class="faq" id="faq" aria-label="FAQ">
       <h2>Quick answers</h2>
       <details>
@@ -336,7 +382,7 @@
       </details>
       <details>
         <summary>Do I need an iPhone?</summary>
-        <p>The full game is iOS only right now. This page lets you try five sample cards in any browser first.</p>
+        <p>The full game is iOS only right now. This page lets you try eight sample cards in any browser first.</p>
       </details>
       <details>
         <summary>Does it work for two people?</summary>
@@ -364,6 +410,11 @@
         · <a href="https://apps.apple.com/app/would-you-for-cash/id6759262761">App Store</a>
       </div>
     </footer>
+
+    <div class="sticky-install" id="stickyInstall" role="region" aria-label="Install prompt">
+      <p><strong>Free on iPhone.</strong> Classic deck included. No ads.</p>
+      <a class="btn" href="https://apps.apple.com/app/would-you-for-cash/id6759262761">App Store</a>
+    </div>
   </div>
 
   <script>
@@ -371,9 +422,12 @@
       var samples = [
         { cash: "$500", q: "Would you wear the same outfit every day for a month for $500?" },
         { cash: "$5,000", q: "Would you give up coffee and energy drinks for a full year for $5,000?" },
+        { cash: "$10,000", q: "Would you let your friends post your camera roll highlights for a week for $10,000?" },
         { cash: "$25,000", q: "Would you delete every social app for one year for $25,000?" },
         { cash: "$50,000", q: "Would you move to a city you have never visited for two years for $50,000?" },
-        { cash: "$100,000", q: "Would you tell your boss your real opinion of them, on speaker, for $100,000?" }
+        { cash: "$75,000", q: "Would you take a job with no days off for six months for $75,000?" },
+        { cash: "$100,000", q: "Would you tell your boss your real opinion of them, on speaker, for $100,000?" },
+        { cash: "$250,000", q: "Would you skip your best friend's wedding for $250,000?" }
       ];
       var i = 0;
       var yesCount = 0;
@@ -392,6 +446,8 @@
       var tallyNo = document.getElementById("tallyNo");
       var shareText = document.getElementById("shareText");
       var btnCopy = document.getElementById("btnCopy");
+      var btnShare = document.getElementById("btnShare");
+      var sticky = document.getElementById("stickyInstall");
       if (!cashEl || !qEl || !btnYes || !btnNo) return;
 
       function showCard() {
@@ -427,6 +483,7 @@
         advancing = true;
         if (kind === "yes") yesCount += 1;
         else noCount += 1;
+        if (sticky) sticky.classList.add("show");
         argueEl.classList.add("show");
         window.setTimeout(function () {
           i += 1;
@@ -470,6 +527,22 @@
             });
           } else {
             window.prompt("Copy this:", text);
+          }
+        });
+      }
+
+      if (btnShare && shareText) {
+        btnShare.addEventListener("click", function () {
+          var text = shareText.textContent || "";
+          var store = "https://apps.apple.com/app/would-you-for-cash/id6759262761";
+          if (navigator.share) {
+            navigator.share({
+              title: "Would You For Cash?",
+              text: text,
+              url: store
+            }).catch(function () {});
+          } else if (btnCopy) {
+            btnCopy.click();
           }
         });
       }
