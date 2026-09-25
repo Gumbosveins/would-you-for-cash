@@ -227,6 +227,7 @@
     .tally span { color: var(--muted); font-weight: 600; }
     .tally .yes { color: var(--cash); }
     .tally .no { color: var(--hot); }
+    #resultLine { color: var(--gold); }
     .share-box {
       margin: 14px auto 0; max-width: 42ch; text-align: left;
       background: rgba(255,255,255,0.03); border: 1px solid var(--line);
@@ -303,7 +304,7 @@
 
     <section class="try-wrap" id="try" aria-label="Try a sample card">
       <h2>Try one card (no install)</h2>
-      <p class="try-sub">Desktop visitors hit an App Store wall. Play 10 Classic style samples here (tap or press Y / N), then grab the free deck on iPhone. On desktop, scan the QR after you finish.</p>
+      <p class="try-sub">Desktop visitors hit an App Store wall. Play 10 Classic style samples here (tap or press Y / N), then grab the free deck on iPhone. Share any card: messengers show the question in the preview. On desktop, scan the QR after you finish.</p>
       <div class="play-active" id="playActive">
         <p class="shared-hint" id="sharedHint" hidden>Shared card. Vote yes or no, then keep going.</p>
         <div class="play-card" id="playCard">
@@ -324,6 +325,7 @@
       <div class="play-done" id="playDone">
         <p style="font-size:1.2rem;font-weight:800;margin-bottom:8px;">You get the idea.</p>
         <div class="tally" aria-live="polite"><span class="yes" id="tallyYes">Yes 0</span><span class="no" id="tallyNo">No 0</span></div>
+        <p id="resultLine" style="font-weight:800;margin:4px 0 12px;font-size:1.05rem;">Your money threshold is loading…</p>
         <p style="color:var(--muted);margin-bottom:16px;">The free Classic deck has dozens more on iPhone. Premium decks unlock when the night gets louder.</p>
         <a class="btn" href="https://apps.apple.com/app/would-you-for-cash/id6759262761">Get the free deck on the App Store</a>
         <div class="qr-row">
@@ -488,6 +490,7 @@
       var btnCopyCard = document.getElementById("btnCopyCard");
       var tallyYes = document.getElementById("tallyYes");
       var tallyNo = document.getElementById("tallyNo");
+      var resultLine = document.getElementById("resultLine");
       var shareText = document.getElementById("shareText");
       var btnCopy = document.getElementById("btnCopy");
       var btnShare = document.getElementById("btnShare");
@@ -495,10 +498,17 @@
       if (!cashEl || !qEl || !btnYes || !btnNo) return;
 
       function cardDeepLink(oneBased) {
-        return baseUrl + "#try/" + oneBased;
+        // Static /c/N.html pages carry card specific OG tags for messenger previews.
+        return baseUrl + "c/" + oneBased + ".html";
       }
 
       function parseDeepCard() {
+        var params = new URLSearchParams(location.search || "");
+        var qc = params.get("c");
+        if (qc) {
+          var qn = parseInt(qc, 10);
+          if (!isNaN(qn)) return qn;
+        }
         var hash = (location.hash || "").replace(/^#/, "");
         if (!hash) return null;
         var m = hash.match(/^try\/(\d+)/i);
@@ -530,16 +540,30 @@
         advancing = false;
       }
 
+      function personalityLine() {
+        var total = yesCount + noCount;
+        if (total <= 0) return "Play a few cards to see your money threshold.";
+        var ratio = yesCount / total;
+        if (ratio >= 0.8) return "You said yes to almost everything. The room will argue with you.";
+        if (ratio >= 0.6) return "Mostly yes. You have a price, and it is not that high.";
+        if (ratio >= 0.4) return "Mixed. You negotiate hard before you take the cash.";
+        if (ratio >= 0.2) return "Mostly no. Your principles cost someone else money.";
+        return "Almost all no. Good luck hosting After Dark.";
+      }
+
       function updateShare() {
         if (tallyYes) tallyYes.textContent = "Yes " + yesCount;
         if (tallyNo) tallyNo.textContent = "No " + noCount;
+        var vibe = personalityLine();
+        if (resultLine) resultLine.textContent = vibe;
         if (shareText) {
           shareText.textContent =
             "I just tried Would You For Cash samples. Yes " +
             yesCount +
             ", No " +
             noCount +
-            ". Try a card (no install): " + baseUrl + "#try · App Store: " + storeUrl;
+            ". " + vibe +
+            " Try a card (no install): " + baseUrl + "#try · App Store: " + storeUrl;
         }
       }
 
